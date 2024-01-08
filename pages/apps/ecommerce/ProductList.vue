@@ -4,7 +4,7 @@ import { ref } from 'vue';
 import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
 import UiParentCard from '@/components/shared/UiParentCard.vue';
 
-//Table
+//Tables
 import EditableTable from '@/components/table/EditableTable.vue';
 
 // theme breadcrumb
