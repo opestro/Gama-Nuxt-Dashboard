@@ -12,7 +12,7 @@ onMounted(() => {
 const getContacts: any = computed(() => {
     return store.contacts;
 });
-
+const stock_status = ['instock', 'outofstock']
 const valid = ref(true);
 const dialog = ref(false);
 const search = ref('');
@@ -44,10 +44,14 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    categories: {
+        type: Object,
+        required: true,
+    },
 });
-const { products } = props
+const { products, categories } = props
 
-console.log(products)
+console.log(categories)
 //Methods
 const filteredList = computed(() => {
     return desserts.value.filter((user: any) => {
@@ -72,15 +76,30 @@ function close() {
         editedIndex.value = -1;
     }, 300);
 }
-function save() {
-    if (editedIndex.value > -1) {
-        Object.assign(desserts.value[editedIndex.value], editedItem.value);
-    } else {
-        desserts.value.push(editedItem.value);
+async function update(editedItem) {
+    const newUpdate = toRaw(editedItem)
+    const productDetails = {
+        id: newUpdate.id,
+        data: {
+            name: newUpdate.name,
+            categories: newUpdate.categories,
+            stock_status: newUpdate.stock_status,
+            regular_price: parseInt(newUpdate.regular_price) || 0,
+            stock_quantity : newUpdate.stock_quantity || 0
+        }
     }
-    close();
-}
+    console.log(productDetails)
+  await  useFetch('http://localhost:3055/products/update/', {
+    query: productDetails,
+        method: 'PUT'
+    }).then((r) => {
+        console.log(r)
+    }).catch((err) => { console.log(err) })
 
+}
+function transformItemValue(item) {
+    return { id: item.id };
+}
 //Computed Property
 const formTitle = computed(() => {
     return editedIndex.value === -1 ? 'New Contact' : 'Edit Contact';
@@ -112,29 +131,36 @@ const formTitle = computed(() => {
                                         label="Id"></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="6">
-                                    <v-text-field variant="outlined" hide-details v-model="editedItem.userinfo"
-                                        label="User info"></v-text-field>
+                                    <v-text-field variant="outlined" hide-details v-model="editedItem.name"
+                                        label="Product name"></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="6">
-                                    <v-text-field variant="outlined" hide-details v-model="editedItem.usermail"
-                                        label="User email" type="email"></v-text-field>
+                                    <v-select label="Category" multiple v-model="editedItem.categories" :items="categories"
+                                        item-title="name" :item-value="transformItemValue" chips>
+
+                                    </v-select>
+
+
                                 </v-col>
                                 <v-col cols="12" sm="6">
-                                    <v-text-field variant="outlined" hide-details v-model="editedItem.phone" label="Phone"
-                                        type="phone"></v-text-field>
+                                    <v-text-field variant="outlined" hide-details v-model="editedItem.stock_quantity"
+                                        label="QTY" type="phone"></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="6">
-                                    <v-text-field variant="outlined" hide-details v-model="editedItem.jdate"
-                                        label="Joining Date"></v-text-field>
+                                    <v-select label="Stock Status" v-model="editedItem.stock_status" :items="stock_status"
+                                        chips>
+                                    </v-select>
                                 </v-col>
                                 <v-col cols="12" sm="6">
-                                    <v-text-field variant="outlined" hide-details v-model="editedItem.role"
-                                        label="Role"></v-text-field>
+                                    <v-text-field variant="outlined" hide-details v-model="editedItem.regular_price"
+                                        label="Price"></v-text-field>
                                 </v-col>
+                                <!-- 
                                 <v-col cols="12" sm="12">
                                     <v-select variant="outlined" hide-details :items="rolesbg"
                                         v-model="editedItem.rolestatus" label="Role Background"></v-select>
                                 </v-col>
+                                -->
                             </v-row>
                         </v-form>
                     </v-card-text>
@@ -142,8 +168,7 @@ const formTitle = computed(() => {
                     <v-card-actions class="pa-4">
                         <v-spacer></v-spacer>
                         <v-btn color="error" @click="close">Cancel</v-btn>
-                        <v-btn color="secondary" :disabled="editedItem.userinfo == '' || editedItem.usermail == ''"
-                            variant="flat" @click="save">Save</v-btn>
+                        <v-btn color="secondary" variant="flat" @click="update(editedItem)">Save</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
@@ -163,6 +188,7 @@ const formTitle = computed(() => {
             </tr>
         </thead>
         <tbody>
+
             <tr v-for="product in products" :key="product.value">
                 <td class="text-subtitle-1">{{ product.id }}</td>
                 <td>
@@ -185,12 +211,30 @@ const formTitle = computed(() => {
                 <td class="text-subtitle-1">
                     <div v-for="categorie in product.categories" :key="categorie">
                         {{ categorie.name }}
+
+                    </div>
+
+                </td>
+
+                <td class="text-subtitle-1">
+                    <div>
+                        {{ product.sku }}
                     </div>
                 </td>
-                <td class="text-subtitle-1 text-no-wrap">{{ product.phone }}</td>
-                <td class="text-subtitle-1 text-no-wrap">{{ product.jdate }}</td>
-                <td>
-                    <v-chip :color="product.rolestatus" size="small" label>{{ product.role }}</v-chip>
+                <td class="text-subtitle-1">
+                    <div>
+                        {{ product.stock_quantity || 0 }}
+                    </div>
+                </td>
+                <td class="text-subtitle-1">
+                    <div>
+                        {{ product.price || 0 }}
+                    </div>
+                </td>
+                <td class="text-subtitle-1">
+                    <div>
+                        {{ product.status + ',' + product.stock_status }}
+                    </div>
                 </td>
                 <td>
                     <div class="d-flex align-center">

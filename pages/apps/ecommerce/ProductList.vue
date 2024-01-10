@@ -23,15 +23,20 @@ const breadcrumbs = ref([
 ]);
 let pageNumber: number = 1
 let pageN: number = 0
+let categories: any = []
 async function productsNavigation(page: number) {
   
     pageN = pageN+ page 
     const products = await useFetch('https://gama.soluve.cloud/products', {
         params: { 'per_page': 24, 'page': pageN}
     })
-   
+
+    const getCategories = await useFetch('https://gama.soluve.cloud/categories', {
+        params: { 'per_page': 100, 'page': pageNumber}
+    })
+    categories = getCategories.data
     pageNumber = pageN + pageNumber
-   return {products, pageN, pageNumber}
+   return {products, pageN, pageNumber,categories}
  
 
    
@@ -50,7 +55,7 @@ console.log(pageNumber)
     <v-row>
         <v-col cols="12">
             <UiParentCard title="Editable Table" class=" my-2">
-                <EditableTable :products="products.data" />
+                <EditableTable :products="products.data" :categories="toRaw(categories)" />
                 <div class="d-flex justify-end my-5 mr-5 gap-2">
                     <v-btn color="info" variant="flat" >Previose page</v-btn>
                     <v-btn color="info" variant="flat" disabled >{{pageN}}</v-btn>
