@@ -31,12 +31,6 @@ definePageMeta({
     <!----------->
     <!--Content-->
     <MainBanner />
-    <OurProducts />
-    <FrameWorks />
-    <UserReview />
-    <Features />
-    <AskQuestion />
-    <BuyNow />
     <!----------->
     <!--Footer-->
     <Footer />

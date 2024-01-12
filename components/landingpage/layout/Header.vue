@@ -14,23 +14,18 @@ const appsdrawer = ref(false);
             ----------------------------------------------- -->
             <v-app-bar height="80" class="lp-header" flat>
                 <v-container class="maxWidth py-sm-4 py-0">
-                    <v-toolbar class="d-flex align-center">
+                    <v-toolbar class="d-flex justify-center align-center">
 
                          <!-- Logo -->
-                         <div v-if="customizer.setRTLLayout" rtl>
-                            <LcFullLogoRtlLogo />
-                        </div>
-                        <div v-else>
-                        <LcFullLogo />
-                        </div>
+                     
+                         <div class="flex justify-center" >
+                            GammaOutiallge
+                             </div>
+                             
                         <!-- Logo -->
                         <!-- Desktop view Navigation -->
-                        <div class="navigation ml-auto d-lg-flex d-none">
-                            <LandingpageLayoutNavigation/>
-                        </div>
-                        <v-btn variant="text" class="hidden-lg-and-up ml-auto" icon @click.stop="appsdrawer = !appsdrawer">
-                            <Menu2Icon size="22" stroke-width="1.5" />
-                        </v-btn>
+
+                       
                     </v-toolbar>
                 </v-container>
             </v-app-bar>
