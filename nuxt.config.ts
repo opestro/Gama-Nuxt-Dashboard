@@ -20,6 +20,7 @@ export default defineNuxtConfig({
   },
   //build: { transpile: ["vuetify"] },
   modules: [
+    'nuxt-vuefire',
     "@pinia/nuxt",
     async (options, nuxt) => {
       nuxt.hooks.hook("vite:extendConfig", (config: any) =>
@@ -30,6 +31,18 @@ export default defineNuxtConfig({
       );
     },
   ],
+  vuefire: {
+    auth: {
+      enabled: true
+    },
+    config: {
+      apiKey: 'AIzaSyBjD6TYg6C27Xg_y4zydt2g3xBYxxCRZ6Y',
+      authDomain: 'gamaoutillage-59a38.firebaseapp.com',
+      projectId: 'gamaoutillage-59a38',
+      appId: '1:701425524344:web:9e7231fd1a33e5de8ed78d',
+      // there could be other properties depending on the project
+    },
+  },
   app: {
     head: {
       title:
