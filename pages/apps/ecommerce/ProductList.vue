@@ -3,7 +3,9 @@ import { ref } from 'vue';
 // common components
 import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
 import UiParentCard from '@/components/shared/UiParentCard.vue';
-
+definePageMeta({
+  middleware: ['auth'],
+})
 //Tables
 import EditableTable from '@/components/table/EditableTable.vue';
 
@@ -44,7 +46,6 @@ async function productsNavigation(page: number) {
 }
 
 const {products} = await productsNavigation(pageNumber)
-console.log(pageNumber)
 </script>
 
 <template>

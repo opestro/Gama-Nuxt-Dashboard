@@ -51,7 +51,6 @@ const props = defineProps({
 });
 const { products, categories } = props
 
-console.log(categories)
 //Methods
 const filteredList = computed(() => {
     return desserts.value.filter((user: any) => {
@@ -88,12 +87,10 @@ async function update(editedItem) {
             stock_quantity : newUpdate.stock_quantity || 0
         }
     }
-    console.log(productDetails)
   await  useFetch('http://localhost:3055/products/update/', {
     query: productDetails,
         method: 'PUT'
     }).then((r) => {
-        console.log(r)
     }).catch((err) => { console.log(err) })
 
 }

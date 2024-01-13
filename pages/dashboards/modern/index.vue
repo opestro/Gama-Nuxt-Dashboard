@@ -11,7 +11,9 @@ import UserCard from "../dashboardComponents/modern/UserCard.vue";
 import BestSellingProducts from "../dashboardComponents/modern/BestSellingProducts.vue";
 import WeeklyStats from "../dashboardComponents/modern/WeeklyStats.vue";
 import TopProjects from "../dashboardComponents/modern/TopProjects.vue";
-
+definePageMeta({
+  middleware: ['auth'],
+})
 </script>
 <template>
     <v-row>

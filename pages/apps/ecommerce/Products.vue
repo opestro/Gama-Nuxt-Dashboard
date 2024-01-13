@@ -10,7 +10,9 @@ import { orderBy, filter, includes } from 'lodash';
 
 import ProductEmplty from '@/components/apps/ecommerce/listing/ProductEmplty.vue';
 import ProductFilters from '@/components/apps/ecommerce/listing/ProductFilters.vue';
-
+definePageMeta({
+  middleware: ['auth'],
+})
 const page = ref({ title: 'Products' });
 const breadcrumbs = ref([
     {

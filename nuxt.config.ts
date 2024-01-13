@@ -37,7 +37,7 @@ export default defineNuxtConfig({
       sessionCookie: true
     },
     config: {
-      apiKey: 'AIzaSyBjD6TYg6C27Xg_y4zydt2g3xBYxxCRZ6Y',
+      apiKey: process.env.FIREBASE_API_KEY,
       authDomain: 'gamaoutillage-59a38.firebaseapp.com',
       projectId: 'gamaoutillage-59a38',
       appId: '1:701425524344:web:9e7231fd1a33e5de8ed78d',

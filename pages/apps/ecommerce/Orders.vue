@@ -6,7 +6,9 @@ import UiParentCard from '@/components/shared/UiParentCard.vue';
 
 //Table
 import EditableTable from '@/components/table/EditableTable.vue';
-
+definePageMeta({
+  middleware: ['auth'],
+})
 // theme breadcrumb
 const page = ref({ title: 'Orders' });
 const breadcrumbs = ref([

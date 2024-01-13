@@ -13,6 +13,9 @@ import YearlySales from "../dashboardComponents/ecommerce/YearlySales.vue";
 import PaymentGateways from "../dashboardComponents/ecommerce/PaymentGateways.vue";
 import ProductPerformance from "../dashboardComponents/ecommerce/ProductPerformance.vue";
 import RecentTransactions from "../dashboardComponents/ecommerce/RecentTransactions.vue";
+definePageMeta({
+  middleware: ['auth'],
+})
 </script>
 <template>
     <v-row>

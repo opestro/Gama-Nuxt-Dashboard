@@ -1,10 +1,10 @@
 <script setup >
 import { ref } from "vue";
 import { signInWithEmailAndPassword } from "firebase/auth"
-const auth =  useFirebaseAuth()
+const auth = useFirebaseAuth()
 const router = useRouter();
-const password ='';
-const email = '';
+const password = ref('');
+const email = ref('');
 const passwordRules = ref([
   (v) => !!v || "Password is required",
   (v) =>
@@ -16,11 +16,12 @@ const emailRules = ref([
 ]);
 
 async function validate() {
- await signInWithEmailAndPassword(auth,
-    email,
-    password).then(()=>{
+  console.log(email.value)
+  await signInWithEmailAndPassword(auth,
+    email.value,
+    password.value).then(() => {
       router.push({ path: "/dashboards/modern" });
-    }).catch((e)=>{console.error(e)});
+    }).catch((e) => { console.error(e) });
 
 
 
@@ -48,10 +49,9 @@ async function validate() {
           ?</NuxtLink>
       </div>
     </div>
-    <v-btn size="large" :loading="isSubmitting" color="primary" :disabled="!password"  @click="validate()" flat>Sign
+    <v-btn size="large" :loading="isSubmitting" color="primary" :disabled="!password" @click="validate()" flat>Sign
       In</v-btn>
-    <div v-if="errors.apiError" class="mt-2">
-      <v-alert color="error">{{ errors.apiError }}</v-alert>
-    </div>
+
+
   </div>
 </template>

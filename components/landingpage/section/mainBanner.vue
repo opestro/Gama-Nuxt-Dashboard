@@ -9,7 +9,7 @@
                             ><RocketIcon size="18" class="text-secondary" /> Ecommerce Dashboard</span
                         >
                         <h1 class="bannerTitle pt-5 font-weight-bold" data-aos="fade-up" data-aos-duration="500">
-                            Most powerful & Advenced <span class="text-primary">Product Managment System</span>
+                            Most powerful & Advanced <span class="text-primary">Product Managment System</span>
                         </h1>
                         <p class="pt-8 pb-6 text-h5 font-weight-regular" data-aos="fade-up" data-aos-duration="800">
                            This WeppApp created by Swellty { Algeria }
