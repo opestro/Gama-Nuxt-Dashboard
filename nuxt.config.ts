@@ -47,7 +47,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       title:
-        "Modernize Nuxt 3 - Vuetify 3 - vite - Typescript Based Admin Dashboard Template",
+        "GAMA OUTILLAGE - DASHBOARD & PRODUCTS MANAGEMENT",
     },
   },
   nitro: {
