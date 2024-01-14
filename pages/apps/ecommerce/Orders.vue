@@ -3,9 +3,10 @@ import { ref } from 'vue';
 // common components
 import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
 import UiParentCard from '@/components/shared/UiParentCard.vue';
+import OrdersTable from '~/components/table/OrdersTable.vue';
 
 //Table
-import EditableTable from '@/components/table/EditableTable.vue';
+
 definePageMeta({
   middleware: ['auth'],
 })
@@ -24,6 +25,24 @@ const breadcrumbs = ref([
     }
 ]);
 
+let pageNumber: number = 1
+let pageN: number = 0
+let categories: any = []
+//let {products}: any  = []
+async function ordersNavigation(page: number) {
+   const orders = await useLazyFetch('https://gama.soluve.cloud/orders', {
+        params: { 'per_page': 50, 'page': page}
+    })
+   
+    pageNumber = page
+    return {orders, pageN, pageNumber}
+}
+async function productsPagination(data: any) {
+    return navigateTo('/apps/ecommerce/product/'+data)
+}
+
+const {orders}: any = await ordersNavigation(pageNumber)
+console.log(orders)
 </script>
 
 <template>
@@ -34,7 +53,12 @@ const breadcrumbs = ref([
     <v-row>
         <v-col cols="12">
             <UiParentCard title="Orders">
-                <EditableTable />
+                <OrdersTable :orders="orders.data"  />
+                <div class="d-flex justify-end my-5 mr-5 gap-2">
+                    <v-btn color="info" variant="flat" >Previose page</v-btn>
+                    <v-btn color="info" variant="flat" disabled >{{pageNumber}}</v-btn>
+                    <v-btn color="info" variant="flat" @click="productsPagination((pageNumber+1))">Next page</v-btn>
+                </div>
             </UiParentCard>
         </v-col>
     </v-row>
