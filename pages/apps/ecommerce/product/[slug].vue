@@ -54,8 +54,8 @@ async function productsPagination(data: any) {
     <!-- ---------------------------------------------------- -->
     <!-- Table Editable -->
     <!-- ---------------------------------------------------- -->
-    <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
-    {{ pageN }}
+    <BaseBreadcrumb title="Products List" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
+
     <v-row>
         <v-col cols="12">
             <UiParentCard title="Editable Table" class=" my-2">

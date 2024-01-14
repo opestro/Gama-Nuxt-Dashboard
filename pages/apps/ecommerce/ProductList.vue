@@ -49,7 +49,7 @@ const {products}: any = await productsNavigation(pageNumber)
     <!-- ---------------------------------------------------- -->
     <!-- Table Editable -->
     <!-- ---------------------------------------------------- -->
-    <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
+    <BaseBreadcrumb title="Products List" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
     <v-row>
         <v-col cols="12">
             <UiParentCard title="Editable Table" class=" my-2">

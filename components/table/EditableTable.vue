@@ -20,24 +20,8 @@ const rolesbg = ref(['primary', 'secondary', 'error', 'success', 'warning']);
 const desserts = ref(contact);
 const editedIndex = ref(-1);
 const editedItem = ref({
-    id: '',
-    avatar: user1,
-    userinfo: '',
-    usermail: '',
-    phone: '',
-    jdate: '',
-    role: '',
-    rolestatus: ''
 });
 const defaultItem = ref({
-    id: '',
-    avatar: user1,
-    userinfo: '',
-    usermail: '',
-    phone: '',
-    jdate: '',
-    role: '',
-    rolestatus: ''
 });
 const props = defineProps({
     products: {
@@ -49,6 +33,7 @@ const props = defineProps({
         required: true,
     },
 });
+console.log(props)
 const { products, categories } = props
 
 //Methods
@@ -59,8 +44,10 @@ const filteredList = computed(() => {
 });
 
 function editItem(item: any) {
-    editedIndex.value = desserts.value.indexOf(item);
-    editedItem.value = Object.assign({}, item);
+    console.log(item)
+    const data = JSON.parse(JSON.stringify(item))
+    editedIndex.value = desserts.value.indexOf(data);
+    editedItem.value = Object.assign({}, data);
     dialog.value = true;
 }
 function deleteItem(item: any) {
