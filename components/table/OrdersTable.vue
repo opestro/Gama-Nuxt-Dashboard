@@ -12,7 +12,7 @@ onMounted(() => {
 const getContacts: any = computed(() => {
     return store.contacts;
 });
-const stock_status = ['pending', 'processing', 'on-hold', 'completed', 'cancelled', 'refunded', 'failed', 'trash']
+const stock_status = ['pending', 'processing', 'on-hold', 'completed', 'cancelled', 'refunded', 'failed' , 'trash']
 const valid = ref(true);
 const dialog = ref(false);
 const search = ref('');
@@ -86,7 +86,7 @@ async function update(editedItem) {
                 variant="outlined"></v-text-field>
         </v-col>
         <v-col cols="12" lg="8" md="6" class="text-right">
-            <v-dialog v-model="dialog">
+            <v-dialog v-model="dialog" >
                 <!-- <template v-slot:activator="{ props }">
                     <v-btn color="primary" v-bind="props" flat class="ml-auto">
                         <v-icon class="mr-2">mdi-plus</v-icon>Add Order
@@ -94,24 +94,24 @@ async function update(editedItem) {
                 </template> -->
                 <v-card style="overflow: hidden;">
                     <v-card-title class="pa-4 bg-secondary">
-                        <span class="title text-white">{{ editedItem.id ? 'ORDER N: ' + '#' + editedItem.id : '' }}</span>
+                        <span class="title text-white">{{ editedItem.id?'ORDER N: ' + '#' + editedItem.id :'' }}</span>
                     </v-card-title>
 
                     <v-card-text style="overflow-y: auto;">
                         <v-form ref="form" v-model="valid" lazy-validation>
                             <v-card>
                                 <v-card-title>
-
-                                    <v-chip class="ma-2">{{
-                                        'FULL NAME : ' + editedItem.billing.first_name + ' ' + editedItem.billing.first_name
+                                  
+                                     <v-chip class="ma-2">{{
+                                      'FULL NAME : '+  editedItem.billing.first_name + ' ' + editedItem.billing.first_name
                                     }}</v-chip>
-                                    <br>
-                                    <v-chip class="ma-2">
+                                     <br>
+                                     <v-chip class="ma-2">
                                         {{
-                                            'TOTAL : ' + editedItem.total + editedItem.currency_symbol
-                                        }}
-                                    </v-chip>
-
+                                            'TOTAL : ' + editedItem.total + editedItem.currency_symbol 
+                                         }}
+                                     </v-chip>
+                                    
                                 </v-card-title>
                                 <v-card-item>
                                     <v-card-title class="my-3">PRODUCTS</v-card-title>
@@ -129,32 +129,38 @@ async function update(editedItem) {
                                     <v-card-title class="my-3">SHIPPING</v-card-title>
                                     <v-card-item>
                                         ADDRESS :
-                                        <v-card-item> <v-card-title class="mx-3"> {{ editedItem.billing.address_1 }}
-                                            </v-card-title></v-card-item>
-
+                                        <v-card-subtitle class="mx-3 mb-3"> {{editedItem.billing.address_1}} </v-card-subtitle>
                                         CITY :
-                                        <v-card-item>   <v-card-title class="mx-3"> {{ editedItem.billing.city }}</v-card-title></v-card-item>
+                                        <v-card-subtitle class="mx-3 mb-3"> {{editedItem.billing.city }}</v-card-subtitle>
                                         POSTCODE :
-                                        <v-card-item>   <v-card-title class="mx-3"> {{ editedItem.billing.postcode }} </v-card-title></v-card-item>
+                                        <v-card-subtitle class="mx-3 mb-3"> {{editedItem.billing.postcode}} </v-card-subtitle>
                                         STATE :
-                                        <v-card-item>   <v-card-title class="mx-3"> {{ editedItem.billing.state }}</v-card-title></v-card-item>
+                                        <v-card-subtitle class="mx-3 mb-3"> {{editedItem.billing.state }}</v-card-subtitle>
                                         PHONE :
-                                        <v-card-item>    <v-card-title class="mx-3"> {{ editedItem.billing.phone }}</v-card-title></v-card-item>
+                                        <v-card-subtitle class="mx-3 mb-3"> {{editedItem.billing.phone }}</v-card-subtitle>
                                     </v-card-item>
+
                                 </v-card-item>
+                                
                                 <v-card-item>
-                                    <v-card-title>{{ 'Stock Status : ' + editedItem.status }}</v-card-title>
-                                    <v-select class="my-2" label="Stock Status" v-model="editedItem.status"
-                                        :items="stock_status" chips></v-select>
+                                <v-card-title>{{ 'Stock Status : ' + editedItem.status }}</v-card-title>
+                                    <v-select class="my-2" label="Stock Status" v-model="editedItem.status" :items="stock_status"
+                                    chips></v-select>
+                                    <div class="d-flex justify-end">
+
+                                        
+                                    </div>
                                 </v-card-item>
+                                
                             </v-card>
                         </v-form>
                     </v-card-text>
+
                     <v-card-actions class="pa-4">
                         <v-spacer></v-spacer>
                         <v-btn color="error" class="ma-2" @click="close">Cancel</v-btn>
-                        <v-btn color="secondary" variant="flat">UPDATE STATUS</v-btn>
-                        <!-- <v-btn color="secondary" variant="flat" @click="update(editedItem)">Save</v-btn> -->
+                        <v-btn  color="secondary" variant="flat">UPDATE STATUS</v-btn>
+                      <!-- <v-btn color="secondary" variant="flat" @click="update(editedItem)">Save</v-btn> --> 
                     </v-card-actions>
                 </v-card>
             </v-dialog>
