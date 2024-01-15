@@ -5,7 +5,7 @@ import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
 import UiParentCard from '@/components/shared/UiParentCard.vue';
 
 //Table
-import EditableTable from '~/components/table/EditableTable.vue';
+import EditableTable from '~/components/table/OrderTable.vue';
 
 // theme breadcrumb
 const page = ref({ title: 'Editable Table' });
@@ -18,7 +18,7 @@ const breadcrumbs = ref([
     {
         text: 'Editable Table',
         disabled: true,
-        href: ''
+        href: '/'
     }
 ]);
 </script>

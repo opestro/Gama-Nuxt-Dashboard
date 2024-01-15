@@ -104,7 +104,7 @@ const horizontalItems: menu[] = [
                     {
                         title: 'List',
                         icon: CircleIcon,
-                        to: '/apps/ecommerce/productlist'
+                        to: '/apps/ecommerce/products/1'
                     },
                     {
                         title: 'Checkout',

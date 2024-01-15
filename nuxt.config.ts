@@ -26,7 +26,7 @@ export default defineNuxtConfig({
       nuxt.hooks.hook("vite:extendConfig", (config: any) =>
         // @ts-ignore
         config.plugins.push(vuetify({
-                   styles: { configFile: resolve("/assets/scss/variables.scss") },
+                   styles: { configFile: resolve("/assets/scss/_variables.scss") },
                  }))
       );
     },

@@ -138,12 +138,12 @@ const sidebarItem: menu[] = [
       {
         title: "Products",
         icon: PointIcon,
-        to: "/apps/ecommerce/productlist",
+        to: "/apps/ecommerce/products/1",
       },
       {
         title: "Orders",
         icon: PointIcon,
-        to: "/apps/ecommerce/orders",
+        to: "/apps/ecommerce/orders/1",
       },
 
     ],

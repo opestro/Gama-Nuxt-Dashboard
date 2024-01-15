@@ -96,3 +96,8 @@ useHead({
         </v-app>
     </v-locale-provider>
 </template>
+<style>
+.v-table__wrapper{ 
+    max-height: 70vh!important;
+}
+</style>

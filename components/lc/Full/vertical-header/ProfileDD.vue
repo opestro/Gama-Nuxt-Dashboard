@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import { MailIcon } from "vue-tabler-icons";
 import { profileDD } from "@/_mockApis/headerData";
+import { signOut } from "firebase/auth"
+const auth = useFirebaseAuth()
+const router = useRouter();
+
+function signOut_(){ 
+  signOut(auth).then(() => {
+      router.push({ path: "/auth/login" });
+    }).catch((e) => { console.error(e.message) });
+}
 </script>
 
 <template>
@@ -89,7 +98,7 @@ import { profileDD } from "@/_mockApis/headerData";
         </div>
       </div>
       <div class="pt-4 pb-6 px-8 text-center">
-        <v-btn color="primary" variant="outlined" block to="/auth/login"
+        <v-btn color="primary" variant="outlined" block @click="signOut_()"
           >Logout</v-btn
         >
       </div>
