@@ -7,7 +7,7 @@ definePageMeta({
   middleware: ['auth'],
 })
 //Tables
-import EditableTable from '@/components/table/EditableTable.vue';
+import ProductsTable from '@/components/table/ProductsTable.vue';
 
 // theme breadcrumb
 const page = ref({ title: 'Editable Table' });
@@ -53,7 +53,7 @@ const {products}: any = await productsNavigation(pageNumber)
     <v-row>
         <v-col cols="12">
             <UiParentCard title="Editable Table" class=" my-2">
-                <EditableTable :products="products.data" :categories="toRaw(categories)" />
+                <ProductsTable :products="products.data" :categories="toRaw(categories)" />
                 <div class="d-flex justify-end my-5 mr-5 gap-2">
                     <v-btn color="info" variant="flat" >Previose page</v-btn>
                     <v-btn color="info" variant="flat" disabled >{{pageNumber}}</v-btn>
