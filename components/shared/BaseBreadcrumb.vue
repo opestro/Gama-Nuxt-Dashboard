@@ -7,7 +7,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <v-card class="bg-lightprimary elevation-0 rounded-md mb-8">
+  <v-card class="bg-lightprimary elevation-0 rounded-md mb-8 pb-2">
     <div class="px-8 py-8 py-lg-0">
       <div class="d-flex justify-space-between">
         <div class="d-flex py-0 align-center">
@@ -30,7 +30,7 @@ const props = defineProps({
         </div>
         <div class="d-none py-0 d-lg-block overflow-hidden">
           <div class="mb-n16 mt-3">
-            <img src="/images/breadcrumb/ChatBc.png" alt="breadcrumb" />
+            <img :src="breadcrumbs.img?breadcrumbs.img:'/images/svgs/icon-connect.svg'" alt="img" />
           </div>
         </div>
       </div>

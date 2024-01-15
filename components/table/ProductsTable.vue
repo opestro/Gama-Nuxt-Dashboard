@@ -38,13 +38,12 @@ const { products, categories } = props
 
 //Methods
 const filteredList = computed(() => {
-    return desserts.value.filter((user: any) => {
-        return user.userinfo.toLowerCase().includes(search.value.toLowerCase());
+    return desserts.value.filter((products: any) => {
+        return products.name.toLowerCase().includes(search.value.toLowerCase());
     });
 });
 
 function editItem(item: any) {
-    console.log(item)
     const data = JSON.parse(JSON.stringify(item))
     editedIndex.value = desserts.value.indexOf(data);
     editedItem.value = Object.assign({}, data);
@@ -56,12 +55,12 @@ function deleteItem(item: any) {
 }
 
 function close() {
+    
     dialog.value = false;
-    setTimeout(() => {
-        editedItem.value = Object.assign({}, defaultItem.value);
-        editedIndex.value = -1;
-    }, 300);
+    editedItem.value = Object.assign({}, defaultItem.value);
+    editedIndex.value = -1;
 }
+
 async function update(editedItem) {
     const newUpdate = toRaw(editedItem)
     const productDetails = {
@@ -81,37 +80,31 @@ async function update(editedItem) {
     }).catch((err) => { console.log(err) })
 
 }
-function transformItemValue(item) {
-    return { id: item.id };
-}
-//Computed Property
-const formTitle = computed(() => {
-    return editedIndex.value === -1 ? 'New Contact' : 'Edit Contact';
-});
+
 </script>
 <template>
     <v-row>
         <v-col cols="12" lg="4" md="6">
-            <v-text-field density="compact" v-model="search" label="Search Contacts" hide-details
+            <v-text-field density="compact" v-model="search" label="Search Product" hide-details
                 variant="outlined"></v-text-field>
         </v-col>
         <v-col cols="12" lg="8" md="6" class="text-right">
             <v-dialog v-model="dialog" max-width="500">
                 <template v-slot:activator="{ props }">
                     <v-btn color="primary" v-bind="props" flat class="ml-auto">
-                        <v-icon class="mr-2">mdi-account-multiple-plus</v-icon>Add Contact
+                        <v-icon class="mr-2">mdi-plus</v-icon>Add Product
                     </v-btn>
                 </template>
                 <v-card>
                     <v-card-title class="pa-4 bg-secondary">
-                        <span class="title text-white">{{ formTitle }}</span>
+                        <span class="title text-white">{{ editedItem.id ? 'Edit Product' : 'New Product' }}</span>
                     </v-card-title>
 
                     <v-card-text>
                         <v-form ref="form" v-model="valid" lazy-validation>
                             <v-row>
-                                <v-col cols="12" sm="6">
-                                    <v-text-field variant="outlined" hide-details v-model="editedItem.id"
+                                <v-col v-if="editedItem.id" cols="12" sm="6">
+                                    <v-text-field variant="outlined" disabled hide-details v-model="editedItem.id"
                                         label="Id"></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="6">
@@ -119,12 +112,9 @@ const formTitle = computed(() => {
                                         label="Product name"></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="6">
-                                    <v-select label="Category" multiple v-model="editedItem.categories" :items="categories"
-                                        item-title="name" :item-value="transformItemValue" chips>
-
+                                    <v-select label="Category" multiple v-model="editedItem.categories" :items="categories || []"
+                                        item-title="name" item-value="id" chips>
                                     </v-select>
-
-
                                 </v-col>
                                 <v-col cols="12" sm="6">
                                     <v-text-field variant="outlined" hide-details v-model="editedItem.stock_quantity"
@@ -151,7 +141,7 @@ const formTitle = computed(() => {
 
                     <v-card-actions class="pa-4">
                         <v-spacer></v-spacer>
-                        <v-btn color="error" @click="close">Cancel</v-btn>
+                        <v-btn color="error" @click="close(true)">Cancel</v-btn>
                         <v-btn color="secondary" variant="flat" @click="update(editedItem)">Save</v-btn>
                     </v-card-actions>
                 </v-card>
@@ -162,8 +152,9 @@ const formTitle = computed(() => {
         <thead>
             <tr>
                 <th class="text-subtitle-1 font-weight-semibold text-no-wrap">ID</th>
+                <th class="text-subtitle-1 font-weight-semibold text-no-wrap">IMG</th>
                 <th class="text-subtitle-1 font-weight-semibold text-no-wrap">PRODUCT</th>
-                <th class="text-subtitle-1 font-weight-semibold text-no-wrap">CATEGORY</th>
+                <!-- <th class="text-subtitle-1 font-weight-semibold text-no-wrap">CATEGORY</th> -->
                 <th class="text-subtitle-1 font-weight-semibold text-no-wrap">SKU</th>
                 <th class="text-subtitle-1 font-weight-semibold text-no-wrap">QTY</th>
                 <th class="text-subtitle-1 font-weight-semibold text-no-wrap">PRICE</th>
@@ -175,30 +166,24 @@ const formTitle = computed(() => {
 
             <tr v-for="product in products" :key="product.value">
                 <td class="text-subtitle-1">{{ product.id }}</td>
-                <td>
-                    <div class="d-flex align-center py-4">
-                        <div v-if="product.images[0]" v-for="image in product.images.slice(0, 2)" :key="image" size="40"
-                            class="ml-n5 avtar-border">
-                            <v-img
-                                :src="image || 'https://gamaoutillage.net/wp-content/uploads/2024/01/1665343934977@1x_1-1.jpg'"
-                                width="45px" class="rounded-md img-fluid " />
-                        </div>
-                        <div v-else size="40" class="ml-n4 avtar-border">
-                            <v-img src=" https://gamaoutillage.net/wp-content/uploads/2024/01/1665343934977@1x_1-1.jpg"
-                                width="45px" class="rounded-md img-fluid " /> NO IMG
-                        </div>
-                        <div class="ml-5">
-                            <h4 class="text-h7 font-weight-semibold">{{ product.name }}</h4>
-                        </div>
+                <td> 
+                    <div size="40"
+                                 class="avtar-border">
+                                <v-img
+                                    :src="product.images[0] ?product.images[0]: 'https://gamaoutillage.net/wp-content/uploads/2024/01/1665343934977@1x_1-1.jpg'"
+                                    width="45px" class="rounded-md img-fluid " />
                     </div>
                 </td>
-                <td class="text-subtitle-1">
+                <td>
+                    <h4 class="text-h7 font-weight-semibold">{{ product.name }}</h4>
+                </td>
+                <!-- <td class="text-subtitle-1">
                     <div v-for="categorie in product.categories" :key="categorie">
                         {{ categorie.name }}
 
                     </div>
 
-                </td>
+                </td> -->
 
                 <td class="text-subtitle-1">
                     <div>
@@ -217,7 +202,9 @@ const formTitle = computed(() => {
                 </td>
                 <td class="text-subtitle-1">
                     <div>
-                        {{ product.status + ',' + product.stock_status }}
+                        <v-chip :color="product.stock_status == 'instock'?'#53ab27':'warning'">
+                            {{ product.status }}
+                        </v-chip>
                     </div>
                 </td>
                 <td>

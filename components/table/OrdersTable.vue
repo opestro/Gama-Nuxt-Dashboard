@@ -77,38 +77,31 @@ async function update(editedItem) {
     }).catch((err) => { console.log(err) })
 
 }
-function transformItemValue(item) {
-    return { id: item.id };
-}
-//Computed Property
-const formTitle = computed(() => {
-    return editedIndex.value === -1 ? 'New Contact' : 'Edit Contact';
-});
+
 </script>
 <template>
     <v-row>
         <v-col cols="12" lg="4" md="6">
-            <v-text-field density="compact" v-model="search" label="Search Contacts" hide-details
+            <v-text-field density="compact" v-model="search" label="Search Order" hide-details
                 variant="outlined"></v-text-field>
         </v-col>
         <v-col cols="12" lg="8" md="6" class="text-right">
-            <v-dialog v-model="dialog" max-width="500">
-                <template v-slot:activator="{ props }">
+            <v-dialog v-model="dialog" >
+                <!-- <template v-slot:activator="{ props }">
                     <v-btn color="primary" v-bind="props" flat class="ml-auto">
-                        <v-icon class="mr-2">mdi-account-multiple-plus</v-icon>Add Contact
+                        <v-icon class="mr-2">mdi-plus</v-icon>Add Order
                     </v-btn>
-                </template>
-                <v-card>
+                </template> -->
+                <v-card style="overflow: hidden;">
                     <v-card-title class="pa-4 bg-secondary">
-                        <span class="title text-white">{{ formTitle }}</span>
+                        <span class="title text-white">{{ editedItem.id?'ORDER N: ' + '#' + editedItem.id :'' }}</span>
                     </v-card-title>
 
-                    <v-card-text>
+                    <v-card-text style="overflow-y: auto;">
                         <v-form ref="form" v-model="valid" lazy-validation>
                             <v-card>
                                 <v-card-title>
-                                    <v-chip class="ma-2">{{ 'ORDER N: ' + '#' + editedItem.id }}</v-chip>
-                                     <br>
+                                  
                                      <v-chip class="ma-2">{{
                                       'FULL NAME : '+  editedItem.billing.first_name + ' ' + editedItem.billing.first_name
                                     }}</v-chip>
@@ -120,22 +113,6 @@ const formTitle = computed(() => {
                                      </v-chip>
                                     
                                 </v-card-title>
-                                <v-card-item>
-                                    <v-card-title class="my-3">SHIPPING</v-card-title>
-                                    <v-card-item>
-                                        ADDRESS :
-                                        <v-text-field v-model="editedItem.billing.address_1" class="mt-2" />
-                                        CITY :
-                                        <v-text-field v-model="editedItem.billing.city" class="mt-2" />
-                                        POSTCODE :
-                                        <v-text-field v-model="editedItem.billing.postcode" class="mt-2" />
-                                        STATE :
-                                        <v-text-field v-model="editedItem.billing.state" class="mt-2" />
-                                        PHONE :
-                                        <v-text-field v-model="editedItem.billing.phone" class="mt-2" />
-                                    </v-card-item>
-
-                                </v-card-item>
                                 <v-card-item>
                                     <v-card-title class="my-3">PRODUCTS</v-card-title>
                                     <div v-for="item in editedItem.line_items" :key="item">
@@ -149,12 +126,29 @@ const formTitle = computed(() => {
                                     </div>
                                 </v-card-item>
                                 <v-card-item>
-                                <v-card-title>UPDATE STATUS</v-card-title>
+                                    <v-card-title class="my-3">SHIPPING</v-card-title>
+                                    <v-card-item>
+                                        ADDRESS :
+                                        <v-card-subtitle class="mx-3"> {{editedItem.billing.address_1}} </v-card-subtitle>
+                                        CITY :
+                                        <v-card-subtitle class="mx-3"> {{editedItem.billing.city }}</v-card-subtitle>
+                                        POSTCODE :
+                                        <v-card-subtitle class="mx-3"> {{editedItem.billing.postcode}} </v-card-subtitle>
+                                        STATE :
+                                        <v-card-subtitle class="mx-3"> {{editedItem.billing.state }}</v-card-subtitle>
+                                        PHONE :
+                                        <v-card-subtitle class="mx-3"> {{editedItem.billing.phone }}</v-card-subtitle>
+                                    </v-card-item>
+
+                                </v-card-item>
+                                
+                                <v-card-item>
+                                <v-card-title>{{ 'Stock Status : ' + editedItem.status }}</v-card-title>
                                     <v-select class="my-2" label="Stock Status" v-model="editedItem.status" :items="stock_status"
                                     chips></v-select>
                                     <div class="d-flex justify-end">
 
-                                        <v-btn  color="secondary" variant="flat">UPDATE STATUS</v-btn>
+                                        
                                     </div>
                                 </v-card-item>
                                 
@@ -165,6 +159,7 @@ const formTitle = computed(() => {
                     <v-card-actions class="pa-4">
                         <v-spacer></v-spacer>
                         <v-btn color="error" class="ma-2" @click="close">Cancel</v-btn>
+                        <v-btn  color="secondary" variant="flat">UPDATE STATUS</v-btn>
                       <!-- <v-btn color="secondary" variant="flat" @click="update(editedItem)">Save</v-btn> --> 
                     </v-card-actions>
                 </v-card>
@@ -176,7 +171,7 @@ const formTitle = computed(() => {
             <tr>
                 <th class="text-subtitle-1 font-weight-semibold text-no-wrap">ID</th>
                 <th class="text-subtitle-1 font-weight-semibold text-no-wrap">FULL NAME</th>
-                <th class="text-subtitle-1 font-weight-semibold text-no-wrap">PRODUCTS</th>
+                <!-- <th class="text-subtitle-1 font-weight-semibold text-no-wrap">PRODUCTS</th> -->
                 <th class="text-subtitle-1 font-weight-semibold text-no-wrap">SHIPPING</th>
                 <th class="text-subtitle-1 font-weight-semibold text-no-wrap">TOTAL</th>
                 <th class="text-subtitle-1 font-weight-semibold text-no-wrap">STATUS</th>
@@ -205,7 +200,7 @@ const formTitle = computed(() => {
                         </div>
                     </div>
                 </td>
-                <td class="text-subtitle-1">
+                <!-- <td class="text-subtitle-1">
                     <div v-for="items in order.line_items" :key="items">
                         <div class=" text-truncate" style="max-width: 150px;">
                             {{ items.name }}
@@ -214,7 +209,7 @@ const formTitle = computed(() => {
 
                     </div>
 
-                </td>
+                </td> -->
 
                 <td class="text-subtitle-1">
                     <div>
@@ -257,13 +252,13 @@ const formTitle = computed(() => {
                                 </v-btn>
                             </template>
                         </v-tooltip>
-                        <v-tooltip text="Delete">
+                        <!-- <v-tooltip text="Delete">
                             <template v-slot:activator="{ props }">
                                 <v-btn icon flat @click="deleteItem(order)" v-bind="props">
                                     <TrashIcon stroke-width="1.5" size="20" class="text-error" />
                                 </v-btn>
                             </template>
-                        </v-tooltip>
+                        </v-tooltip> -->
                     </div>
                 </td>
             </tr>

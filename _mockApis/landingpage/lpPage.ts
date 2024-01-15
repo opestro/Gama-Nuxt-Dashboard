@@ -116,7 +116,7 @@ const productsSlider: ProductsSliderTypes[] = [
         type:false,
         img: img13,
         name: 'eCommerce Product List App',
-        link: '/apps/ecommerce/productlist'
+        link: '/apps/ecommerce/products/1'
     },
     {
         type:false,

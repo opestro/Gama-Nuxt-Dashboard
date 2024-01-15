@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+const route = useRoute()
 // common components
 import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
 import UiParentCard from '@/components/shared/UiParentCard.vue';
-import OrdersTable from '~/components/table/OrdersTable.vue';
+import OrdersTable from '@/components/table/OrdersTable.vue';
 
 //Table
 
@@ -11,7 +12,7 @@ definePageMeta({
   middleware: ['auth'],
 })
 // theme breadcrumb
-const page = ref({ title: 'Orders' });
+const page = ref({ title: 'Orders List' });
 const breadcrumbs = ref([
     {
         text: 'Dashboard',
@@ -19,30 +20,18 @@ const breadcrumbs = ref([
         href: '/'
     },
     {
-        text: 'Editable Table',
+        text: 'Orders',
         disabled: true,
-        href: ''
+        href: '/apps/ecommerce/orders/' + Number(route.params.slug)
     }
 ]);
 
-let pageNumber: number = 1
-let pageN: number = 0
-let categories: any = []
-//let {products}: any  = []
-async function ordersNavigation(page: number) {
-   const orders = await useLazyFetch('https://gama.soluve.cloud/orders', {
-        params: { 'per_page': 50, 'page': page}
-    })
+let pageNumber: number = Number(route.params.slug) ?? 1 
+const orders = await useLazyFetch('https://gama.soluve.cloud/orders', {
+        params: { 'per_page': 50, 'page': pageNumber}
+})
    
-    pageNumber = page
-    return {orders, pageN, pageNumber}
-}
-async function productsPagination(data: any) {
-    return navigateTo('/apps/ecommerce/product/'+data)
-}
 
-const {orders}: any = await ordersNavigation(pageNumber)
-console.log(orders)
 </script>
 
 <template>
@@ -52,12 +41,12 @@ console.log(orders)
     <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
     <v-row>
         <v-col cols="12">
-            <UiParentCard title="Orders">
+            <UiParentCard title="Orders Table">
                 <OrdersTable :orders="orders.data"  />
                 <div class="d-flex justify-end my-5 mr-5 gap-2">
-                    <v-btn color="info" variant="flat" >Previose page</v-btn>
+                    <v-btn :disabled="pageNumber<2" color="info" variant="flat" :to="'/apps/ecommerce/orders/' + (pageNumber - 1)" >Previose page</v-btn>
                     <v-btn color="info" variant="flat" disabled >{{pageNumber}}</v-btn>
-                    <v-btn color="info" variant="flat" @click="productsPagination((pageNumber+1))">Next page</v-btn>
+                    <v-btn :disabled="orders.data.length < 50" color="info" variant="flat" :to="'/apps/ecommerce/orders/' + (pageNumber + 1)">Next page</v-btn>
                 </div>
             </UiParentCard>
         </v-col>
