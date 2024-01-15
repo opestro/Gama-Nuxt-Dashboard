@@ -5,7 +5,7 @@ import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
 import UiParentCard from '@/components/shared/UiParentCard.vue';
 
 //Table
-import EditableTable from '~/components/table/OrderTable.vue';
+import EditableTable from '~/components/table/OrdersTable.vue';
 
 // theme breadcrumb
 const page = ref({ title: 'Editable Table' });
