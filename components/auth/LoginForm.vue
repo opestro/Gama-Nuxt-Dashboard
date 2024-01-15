@@ -16,12 +16,11 @@ const emailRules = ref([
 ]);
 
 async function validate() {
-  console.log(email.value)
   await signInWithEmailAndPassword(auth,
     email.value,
     password.value).then(() => {
       router.push({ path: "/dashboards/modern" });
-    }).catch((e) => { console.error(e) });
+    }).catch((e) => { console.error(e.message) });
 
 
 
