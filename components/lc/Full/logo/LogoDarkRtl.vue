@@ -5,7 +5,7 @@ import RtlDarklogo from '/images/logos/light-logo-rtl.svg';
 <template>
     <div class="logo">
         <NuxtLink to="/">
-            <img :src="RtlDarklogo" alt="home" />
+            <img src="https://i0.wp.com/gamaoutillage.net/wp-content/uploads/2022/10/1665343934977.png?fit=1000%2C1000&ssl=1"/>
         </NuxtLink>
     </div>
 </template>

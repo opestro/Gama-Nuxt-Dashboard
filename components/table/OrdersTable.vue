@@ -12,7 +12,7 @@ onMounted(() => {
 const getContacts: any = computed(() => {
     return store.contacts;
 });
-const stock_status = ['instock', 'outofstock']
+const stock_status = ['pending', 'processing', 'on-hold', 'completed', 'cancelled', 'refunded', 'failed' , 'trash']
 const valid = ref(true);
 const dialog = ref(false);
 const search = ref('');
@@ -67,11 +67,11 @@ async function update(editedItem) {
             categories: newUpdate.categories,
             stock_status: newUpdate.stock_status,
             regular_price: parseInt(newUpdate.regular_price) || 0,
-            stock_quantity : newUpdate.stock_quantity || 0
+            stock_quantity: newUpdate.stock_quantity || 0
         }
     }
-  await  useFetch('http://localhost:3055/products/update/', {
-    query: productDetails,
+    await useFetch('http://localhost:3055/products/update/', {
+        query: productDetails,
         method: 'PUT'
     }).then((r) => {
     }).catch((err) => { console.log(err) })
@@ -105,50 +105,67 @@ const formTitle = computed(() => {
 
                     <v-card-text>
                         <v-form ref="form" v-model="valid" lazy-validation>
-                            <v-row>
-                                <v-col cols="12" sm="6">
-                                    <v-text-field variant="outlined" hide-details v-model="editedItem.id"
-                                        label="Id"></v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="6">
-                                    <v-text-field variant="outlined" hide-details v-model="editedItem.name"
-                                        label="Product name"></v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="6">
-                                    <v-select label="Category" multiple v-model="editedItem.categories" :items="categories"
-                                        item-title="name" :item-value="transformItemValue" chips>
+                            <v-card>
+                                <v-card-title>
+                                    <v-chip class="ma-2">{{ 'ORDER N: ' + '#' + editedItem.id }}</v-chip>
+                                     <br>
+                                     <v-chip class="ma-2">{{
+                                      'FULL NAME : '+  editedItem.billing.first_name + ' ' + editedItem.billing.first_name
+                                    }}</v-chip>
+                                     <br>
+                                     <v-chip class="ma-2">
+                                        {{
+                                            'TOTAL : ' + editedItem.total + editedItem.currency_symbol 
+                                         }}
+                                     </v-chip>
+                                    
+                                </v-card-title>
+                                <v-card-item>
+                                    <v-card-title class="my-3">SHIPPING</v-card-title>
+                                    <v-card-item>
+                                        ADDRESS :
+                                        <v-text-field v-model="editedItem.billing.address_1" class="mt-2" />
+                                        CITY :
+                                        <v-text-field v-model="editedItem.billing.city" class="mt-2" />
+                                        POSTCODE :
+                                        <v-text-field v-model="editedItem.billing.postcode" class="mt-2" />
+                                        STATE :
+                                        <v-text-field v-model="editedItem.billing.state" class="mt-2" />
+                                        PHONE :
+                                        <v-text-field v-model="editedItem.billing.phone" class="mt-2" />
+                                    </v-card-item>
 
-                                    </v-select>
+                                </v-card-item>
+                                <v-card-item>
+                                    <v-card-title class="my-3">PRODUCTS</v-card-title>
+                                    <div v-for="item in editedItem.line_items" :key="item">
 
+                                        <v-card-item>
+                                            <v-card-title>{{ item.id + ' - ' + item.name }}</v-card-title>
+                                            <!-- ADD IMAGE OF PRODUCT HERE DONT FORGET  -->
+                                            <v-card-subtitle>{{ 'QTY - ' + item.quantity }}</v-card-subtitle>
+                                            <v-card-subtitle>{{ 'PRICE - ' + item.price + ' DA' }}</v-card-subtitle>
+                                        </v-card-item>
+                                    </div>
+                                </v-card-item>
+                                <v-card-item>
+                                <v-card-title>UPDATE STATUS</v-card-title>
+                                    <v-select class="my-2" label="Stock Status" v-model="editedItem.status" :items="stock_status"
+                                    chips></v-select>
+                                    <div class="d-flex justify-end">
 
-                                </v-col>
-                                <v-col cols="12" sm="6">
-                                    <v-text-field variant="outlined" hide-details v-model="editedItem.stock_quantity"
-                                        label="QTY" type="phone"></v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="6">
-                                    <v-select label="Stock Status" v-model="editedItem.stock_status" :items="stock_status"
-                                        chips>
-                                    </v-select>
-                                </v-col>
-                                <v-col cols="12" sm="6">
-                                    <v-text-field variant="outlined" hide-details v-model="editedItem.regular_price"
-                                        label="Price"></v-text-field>
-                                </v-col>
-                                <!-- 
-                                <v-col cols="12" sm="12">
-                                    <v-select variant="outlined" hide-details :items="rolesbg"
-                                        v-model="editedItem.rolestatus" label="Role Background"></v-select>
-                                </v-col>
-                                -->
-                            </v-row>
+                                        <v-btn  color="secondary" variant="flat">UPDATE STATUS</v-btn>
+                                    </div>
+                                </v-card-item>
+                                
+                            </v-card>
                         </v-form>
                     </v-card-text>
 
                     <v-card-actions class="pa-4">
                         <v-spacer></v-spacer>
-                        <v-btn color="error" @click="close">Cancel</v-btn>
-                        <v-btn color="secondary" variant="flat" @click="update(editedItem)">Save</v-btn>
+                        <v-btn color="error" class="ma-2" @click="close">Cancel</v-btn>
+                      <!-- <v-btn color="secondary" variant="flat" @click="update(editedItem)">Save</v-btn> --> 
                     </v-card-actions>
                 </v-card>
             </v-dialog>
@@ -158,11 +175,10 @@ const formTitle = computed(() => {
         <thead>
             <tr>
                 <th class="text-subtitle-1 font-weight-semibold text-no-wrap">ID</th>
-                <th class="text-subtitle-1 font-weight-semibold text-no-wrap">PRODUCT</th>
-                <th class="text-subtitle-1 font-weight-semibold text-no-wrap">CATEGORY</th>
-                <th class="text-subtitle-1 font-weight-semibold text-no-wrap">SKU</th>
-                <th class="text-subtitle-1 font-weight-semibold text-no-wrap">QTY</th>
-                <th class="text-subtitle-1 font-weight-semibold text-no-wrap">PRICE</th>
+                <th class="text-subtitle-1 font-weight-semibold text-no-wrap">FULL NAME</th>
+                <th class="text-subtitle-1 font-weight-semibold text-no-wrap">PRODUCTS</th>
+                <th class="text-subtitle-1 font-weight-semibold text-no-wrap">SHIPPING</th>
+                <th class="text-subtitle-1 font-weight-semibold text-no-wrap">TOTAL</th>
                 <th class="text-subtitle-1 font-weight-semibold text-no-wrap">STATUS</th>
                 <th class="text-subtitle-1 font-weight-semibold text-no-wrap">Actions</th>
             </tr>
@@ -173,7 +189,7 @@ const formTitle = computed(() => {
                 <td class="text-subtitle-1">{{ order.id }}</td>
                 <td>
                     <div class="d-flex align-center py-4">
-                      <!--  <div v-if="order.images[0]" v-for="image in order.images.slice(0, 2)" :key="image" size="40"
+                        <!--  <div v-if="order.images[0]" v-for="image in order.images.slice(0, 2)" :key="image" size="40"
                             class="ml-n5 avtar-border">
                             <v-imgs
                                 :src="image || 'https://gamaoutillage.net/wp-content/uploads/2024/01/1665343934977@1x_1-1.jpg'"
@@ -184,13 +200,17 @@ const formTitle = computed(() => {
                                 width="45px" class="rounded-md img-fluid " /> NO IMG
                         </div>-->
                         <div class="ml-5">
-                            <h4 class="text-h7 font-weight-semibold">{{ order.name }}</h4>
+                            <h4 class="text-h7 font-weight-semibold">{{ order.billing.first_name + ' ' +
+                                order.billing.last_name }}</h4>
                         </div>
                     </div>
                 </td>
                 <td class="text-subtitle-1">
-                    <div v-for="categorie in order.categories" :key="categorie">
-                        {{ categorie.name }}
+                    <div v-for="items in order.line_items" :key="items">
+                        <div class=" text-truncate" style="max-width: 150px;">
+                            {{ items.name }}
+                        </div>
+
 
                     </div>
 
@@ -198,22 +218,34 @@ const formTitle = computed(() => {
 
                 <td class="text-subtitle-1">
                     <div>
-                        {{ order.sku }}
+                        {{ order.payment_method_title + ' : ' + order.shipping_total + ' ' + order.currency_symbol }}
                     </div>
                 </td>
                 <td class="text-subtitle-1">
                     <div>
-                        {{ order.stock_quantity || 0 }}
+                        {{ order.total + ' ' + order.currency_symbol }}
                     </div>
                 </td>
                 <td class="text-subtitle-1">
-                    <div>
-                        {{ order.price || 0 }}
+                    <div v-if="order.status == 'completed'">
+                        <v-chip color="#53ab27">
+                            {{ order.status }}
+                        </v-chip>
+
                     </div>
-                </td>
-                <td class="text-subtitle-1">
-                    <div>
-                        {{ order.status + ',' + order.stock_status }}
+                    <div
+                        v-if="order.status == 'pending' || order.status == 'processing' || order.status == 'on-hold' || order.status == 'any'">
+                        <v-chip color="primary">
+                            {{ order.status }}
+                        </v-chip>
+
+                    </div>
+                    <div
+                        v-if="order.status == 'failed' || order.status == 'refunded' || order.status == 'cancelled' || order.status == 'trash'">
+                        <v-chip color="">
+                            {{ order.status }}
+                        </v-chip>
+
                     </div>
                 </td>
                 <td>
