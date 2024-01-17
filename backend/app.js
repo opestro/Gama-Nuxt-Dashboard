@@ -14,7 +14,6 @@ const apiKey = process.env.WP_AUTH_TEST
 
 app.get('/checkout', async (req, res) => {
     const bodyInfo = JSON.parse(req?.query.data) || null
-    console.log(bodyInfo.line_items[0])
     
     if (bodyInfo) {
         const checkout = {
@@ -35,13 +34,14 @@ app.get('/checkout', async (req, res) => {
         }
         await axios.request(checkout).then((data) => {
             const dataJ = data.data
-            res.send(dataJ)
+            res.send({error_:false, message_:'success', code_:200,...dataJ})
+        }).catch((err) => { 
+            res.send({error_:true, message_:err, code_:404})
         })
     } else {
-        res.send('fill all data')
+        res.send({error_:true, message_:'fill all data', code_:404})
     }
      
-   // res.send(dataJ)
 }
 )
 
