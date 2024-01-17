@@ -32,16 +32,27 @@ export default defineNuxtConfig({
     },
   ],
   vuefire: {
-    auth: {
-      enabled: true,
-      sessionCookie: true
-    },
     config: {
       apiKey: process.env.FIREBASE_API_KEY,
       authDomain: 'gamaoutillage-59a38.firebaseapp.com',
       projectId: 'gamaoutillage-59a38',
       appId: '1:701425524344:web:9e7231fd1a33e5de8ed78d',
       // there could be other properties depending on the project
+    },
+    auth: {
+      enabled: true,
+      sessionCookie: true,
+      // persistence: 'local', // default
+      initialize: {
+        onAuthStateChangedAction: 'onAuthStateChangedAction',
+        subscribeManually: false
+      },
+      // ssr: false,
+    },
+    firestore: {},
+    storage: true,
+    functions: {
+      location: 'nam5',  
     },
   },
   app: {

@@ -2,6 +2,11 @@
 import { MailIcon } from "vue-tabler-icons";
 import { profileDD } from "@/_mockApis/headerData";
 import { signOut } from "firebase/auth"
+import { useAuthStore } from '@/stores/auth'
+
+
+
+const user = useAuthStore().user
 const auth = useFirebaseAuth()
 const router = useRouter();
 
@@ -32,15 +37,15 @@ function signOut_(){
             <img src="/images/profile/user-1.jpg" width="80" />
           </v-avatar>
           <div class="ml-3">
-            <h6 class="text-h6 mb-n1">Mathew Anderson</h6>
+            <h6 class="text-h6 mb-n1">{{user?user.displayName:'displayName'}}</h6>
             <span class="text-subtitle-1 font-weight-regular textSecondary"
-              >Designer</span
+              >Admin</span
             >
             <div class="d-flex align-center mt-1">
               <MailIcon size="18" stroke-width="1.5" />
               <span
                 class="text-subtitle-1 font-weight-regular textSecondary ml-2"
-                >info@modernize.com</span
+                >{{user?user.email:'example@mail.com'}}</span
               >
             </div>
           </div>
